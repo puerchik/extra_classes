@@ -1,27 +1,24 @@
-import React from "react";
-import { PagesType, dataState } from "../dataState/dataState";
+import React from 'react';
+import { PagesType } from "../../dataState/dataState";
 import { useParams } from "react-router-dom";
+import { Content } from "./Content";
+import { Error404 } from './Error404';
 
-type PropsType = {
-    pages: PagesType[]
+type PagePropsType = {
+    pages: Array<PagesType>
 }
 
-export const Page = (props: PropsType) => {
-    const params = useParams();
-    let content = props.pages[Number(params.id)];
 
-    if (Number(params.id) === 0 || Number(params.id) === 1 || Number(params.id) === 2) {
-        return (
-            <div>
-                <h1>{content.heading}</h1>
-                <p>{content.about}</p>
-            </div>
-        )
-    } else {
-        return (
-            <div>
-                Error404
-            </div>
-        )
-    }
-}
+export const Page = (props: PagePropsType) => {
+    const param = useParams()
+
+
+    return (
+        <>
+            {props.pages[Number(param.id)]
+            ? <Content heading={props.pages[Number(param.id)].heading} pages={props.pages[Number(param.id)].about} />
+            : <Error404 />}
+        </>
+    );
+};
+

@@ -23,15 +23,17 @@
 .content{
     background-color:#282c34;
     height: 500px;
-    width: 70%;
+    width: 100%;
     color: white;
     font-size: 30px;
 }
+
 
 .navLink {
     text-decoration: none;
     color: #282c34;
 }
+
 
 .nav a.active {
     color: #7fb8f1;
