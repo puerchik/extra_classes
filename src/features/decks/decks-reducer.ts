@@ -1,4 +1,3 @@
-import { Dispatch } from "redux"
 import { DeckType, decksAPI } from "./decks-api"
 
 const initialState = {
@@ -29,22 +28,9 @@ export const setDecksAC = (decks: DeckType[]) => {
   } as const
 }
 
-// thunks
-
-export const fetchDecksTC = () => {
-  return (dispatch: Dispatch<ActionsType>) => {
-    decksAPI.getDecks()
-      .then((res) => {
-        dispatch(setDecksAC(res.data.items))
-      })
-  }
-}
-
 // types
 
-type SetDecksType = ReturnType<typeof setDecksAC>
+export type SetDecksType = ReturnType<typeof setDecksAC>
 
-type ActionsType =
+export type ActionsType =
   | SetDecksType
-
-
