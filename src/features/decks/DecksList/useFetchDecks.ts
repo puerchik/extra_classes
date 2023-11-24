@@ -4,9 +4,10 @@ import { fetchDecksTC } from "../decks-thunks";
 import { DeckType } from "../decks-api";
 
 export const useFetchDecks = () => {
-    
+
     const dispatch = useAppDispatch();
     const decks = useAppSelector<DeckType[]>(state => state.decks.decks)
+console.log(decks);
 
     useEffect(() => {
         dispatch(fetchDecksTC())
