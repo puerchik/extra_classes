@@ -1,4 +1,4 @@
-import { DeckType, decksAPI } from "./decks-api"
+import { DeckType } from "./decks-api"
 
 const initialState = {
   decks: [] as DeckType[], // todo: add type
