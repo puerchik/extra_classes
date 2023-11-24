@@ -9,6 +9,7 @@ export const DecksList = () => {
   return (
     <>
       <ul className={s.list}>
+        
         {decks.map(deck => <DeckItem key={deck.id} deck={deck} />)}
       </ul>
     </>

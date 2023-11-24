@@ -1,5 +1,5 @@
 import { decksAPI } from "./decks-api"
-import { addDeckAC, setDecksAC } from "./decks-reducer"
+import { addDeckAC, removeDeckAC, setDecksAC } from "./decks-reducer"
 import { Dispatch } from "redux"
 
 
@@ -16,9 +16,16 @@ export const addDeckTC = (name: string) => {
     return (dispatch: Dispatch) => {
         decksAPI.addDeck(name)
             .then((res) => {
-                console.log('res.data.items:', res.data);
-                
                 dispatch(addDeckAC(res.data))
             })
+    }
+}
+
+export const removeDeckTC = (id: string) => {
+    return (dispatch: Dispatch) => {
+        decksAPI.removeDeck(id)
+        .then((res)=>{
+            dispatch(removeDeckAC(res.data.id))
+        })
     }
 }

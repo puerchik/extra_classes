@@ -13,16 +13,15 @@ export const decksAPI = {
   },
   addDeck(name: string) {
     return instance.post<DeckType>('decks', { name })
+  },
+  removeDeck(id: string) {
+    return instance.delete<DeckInfoType>(`decks/${id}`)
   }
 }
 
 // types
 
-export type DeckType = {
-  author: {
-    id: string,
-    name: string
-  },
+export type DeckInfoType = {
   id: string,
   userId: string,
   name: string,
@@ -34,6 +33,13 @@ export type DeckType = {
   updated: Date,
   cardsCount: number
 }
+
+export type DeckType = {
+  author: {
+    id: string,
+    name: string
+  }
+} & DeckInfoType
 
 export type ResponseType<T> = {
   items: T,
