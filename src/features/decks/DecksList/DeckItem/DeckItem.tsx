@@ -1,21 +1,30 @@
-import { useAppDispatch } from '../../../../app/store'
-import { DeckType } from '../../decks-api'
-import { removeDeckTC } from '../../decks-thunks'
-import s from './DeckItem.module.css'
+import s from './DeckItem.module.css';
+import { useAppDispatch } from '../../../../app/store.ts';
+import { deleteDeckTC, updateDeckTC } from '../../decks-thunks.ts';
+import { Deck } from '../../decks-api.ts';
+import { useState } from 'react';
 
 type DeckProps = {
-  deck: DeckType // todo: fix
-}
+  deck: Deck;
+};
 
-const TEST_ACC_NAME = 'testName'
+const TEST_ACC_NAME = 'kukusiki';
 
 export const DeckItem = ({ deck }: DeckProps) => {
-  const isTestingDeck = deck.author.name === TEST_ACC_NAME
+  const isTestingDeck = deck.author.name === TEST_ACC_NAME;
   const dispatch = useAppDispatch();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const deleteDeckHandler = () => {
-    dispatch(removeDeckTC(deck.id))
-  }
+  const handleDeleteButtonClick = () => {
+    setIsLoading(true);
+    dispatch(deleteDeckTC(deck.id)).finally(() => {
+      setIsLoading(false);
+    });
+  };
+
+  const handleEditButtonClick = () => {
+    dispatch(updateDeckTC({ id: deck.id, name: `${deck.name} updated` }));
+  };
 
   return (
     <li className={s.item}>
@@ -35,10 +44,12 @@ export const DeckItem = ({ deck }: DeckProps) => {
 
       {isTestingDeck && (
         <div className={s.buttonBox}>
-          <button>update</button>
-          <button onClick={deleteDeckHandler}>delete</button>
+          <button onClick={handleEditButtonClick}>update</button>
+          <button disabled={isLoading} onClick={handleDeleteButtonClick}>
+            delete
+          </button>
         </div>
       )}
     </li>
-  )
-}
+  );
+};

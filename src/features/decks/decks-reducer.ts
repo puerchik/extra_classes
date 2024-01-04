@@ -1,7 +1,7 @@
-import { DeckType } from "./decks-api"
+import { Deck } from './decks-api.ts'
 
 const initialState = {
-  decks: [] as DeckType[], // todo: add type
+  decks: [] as Deck[],
   searchParams: {
     name: '',
   },
@@ -9,48 +9,54 @@ const initialState = {
 
 type DecksState = typeof initialState
 
-export const decksReducer = (state: DecksState = initialState, action: ActionsType): DecksState => {
+export const decksReducer = (state: DecksState = initialState, action: DecksActions): DecksState => {
   switch (action.type) {
     case 'DECKS/SET-DECKS':
-      return { ...state, decks: action.decks }
+      return {
+        ...state,
+        decks: action.decks,
+      }
     case 'DECKS/ADD-DECK':
-      return { ...state, decks: [action.deck, ...state.decks] }
+      return {
+        ...state,
+        decks: [action.deck, ...state.decks],
+      }
     case 'DECKS/DELETE-DECK':
-      return { ...state, decks: state.decks.filter(deck => deck.id !== action.id) }
+      return {
+        ...state,
+        decks: state.decks.filter((deck) => deck.id !== action.id),
+      }
+    case 'DECKS/UPDATE-DECK':
+      return {
+        ...state,
+        decks: state.decks.map((deck) => (deck.id === action.updatedDeck.id ? action.updatedDeck : deck)),
+      }
     default:
       return state
   }
-
 }
 
-// actions
+type DecksActions =
+  | ReturnType<typeof setDecksAC>
+  | ReturnType<typeof addDeckAC>
+  | ReturnType<typeof deleteDeckAC>
+  | ReturnType<typeof updateDeckAC>
 
-export const setDecksAC = (decks: DeckType[]) => {
-  return {
-    type: 'DECKS/SET-DECKS',
-    decks
-  } as const
-}
-export const addDeckAC = (deck: DeckType) => {
-  return {
-    type: 'DECKS/ADD-DECK',
-    deck
-  } as const
-}
-export const removeDeckAC = (id: string) => {
-  return {
-    type: 'DECKS/DELETE-DECK',
-    id
-  } as const
-}
+export const setDecksAC = (decks: Deck[]) => ({
+  type: 'DECKS/SET-DECKS' as const,
+  decks,
+})
+export const addDeckAC = (deck: Deck) => ({
+  type: 'DECKS/ADD-DECK' as const,
+  deck,
+})
 
-// types
+export const deleteDeckAC = (id: string) => ({
+  type: 'DECKS/DELETE-DECK' as const,
+  id,
+})
 
-export type SetDecksType = ReturnType<typeof setDecksAC>
-export type AddDeckType = ReturnType<typeof addDeckAC>
-export type RemoveDeckType = ReturnType<typeof removeDeckAC>
-
-export type ActionsType =
-  | SetDecksType
-  | AddDeckType
-  | RemoveDeckType
+export const updateDeckAC = (updatedDeck: Deck) => ({
+  type: 'DECKS/UPDATE-DECK' as const,
+  updatedDeck,
+})

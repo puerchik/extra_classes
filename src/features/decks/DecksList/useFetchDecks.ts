@@ -1,19 +1,17 @@
-import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../../app/store";
-import { fetchDecksTC } from "../decks-thunks";
-import { DeckType } from "../decks-api";
+import { useAppDispatch, useAppSelector } from '../../../app/store.ts'
+import { selectDecks } from '../decks-selectors.ts'
+import { useEffect } from 'react'
+import { fetchDecksTC } from '../decks-thunks.ts'
 
 export const useFetchDecks = () => {
+  const dispatch = useAppDispatch()
+  const decks = useAppSelector(selectDecks)
 
-    const dispatch = useAppDispatch();
-    const decks = useAppSelector<DeckType[]>(state => state.decks.decks)
-console.log(decks);
+  useEffect(() => {
+    dispatch(fetchDecksTC())
+  }, [dispatch])
 
-    useEffect(() => {
-        dispatch(fetchDecksTC())
-    }, [])
-
-    return {
-        decks
-    }
+  return {
+    decks,
+  }
 }

@@ -1,31 +1,33 @@
-import { decksAPI } from "./decks-api"
-import { addDeckAC, removeDeckAC, setDecksAC } from "./decks-reducer"
-import { Dispatch } from "redux"
+import { Dispatch } from 'redux'
+import { decksAPI, UpdateDeckParams } from './decks-api.ts'
+import { addDeckAC, deleteDeckAC, setDecksAC, updateDeckAC } from './decks-reducer.ts'
+import { setAppStatusAC } from '../../app/app-reducer.ts'
 
-
-export const fetchDecksTC = () => {
-    return (dispatch: Dispatch) => {
-        decksAPI.getDecks()
-            .then((res) => {
-                dispatch(setDecksAC(res.data.items))
-            })
-    }
+export const fetchDecksTC = () => async (dispatch: Dispatch) => {
+  dispatch(setAppStatusAC('loading'))
+  try {
+    const res = await decksAPI.fetchDecks()
+    dispatch(setDecksAC(res.data.items))
+    dispatch(setAppStatusAC('succeeded'))
+  } catch (e) {
+    dispatch(setAppStatusAC('failed'))
+  }
 }
 
-export const addDeckTC = (name: string) => {
-    return (dispatch: Dispatch) => {
-        decksAPI.addDeck(name)
-            .then((res) => {
-                dispatch(addDeckAC(res.data))
-            })
-    }
+export const addDeckTC = (name: string) => async (dispatch: Dispatch) => {
+  return decksAPI.addDeck(name).then((res) => {
+    dispatch(addDeckAC(res.data))
+  })
 }
 
-export const removeDeckTC = (id: string) => {
-    return (dispatch: Dispatch) => {
-        decksAPI.removeDeck(id)
-        .then((res)=>{
-            dispatch(removeDeckAC(res.data.id))
-        })
-    }
+export const deleteDeckTC = (id: string) => async (dispatch: Dispatch) => {
+  return decksAPI.deleteDeck(id).then((res) => {
+    dispatch(deleteDeckAC(res.data.id))
+  })
+}
+
+export const updateDeckTC = (params: UpdateDeckParams) => async (dispatch: Dispatch) => {
+  return decksAPI.updateDeck(params).then((res) => {
+    dispatch(updateDeckAC(res.data))
+  })
 }
